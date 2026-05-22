@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "981487756239",
+    "project_id": "learn-craft-1608",
+    "storage_bucket": "learn-craft-1608.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981487756239:android:18cfce33f026c45812a8ba",
+        "android_client_info": {
+          "package_name": "com.Aurabrix.learn_craft"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981487756239-e7u3586mf25aq7ajtcihfpthdunc583h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-PZqcNlECvbn-2ESwy4-bKAsxgS1w5D4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981487756239-e7u3586mf25aq7ajtcihfpthdunc583h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "981487756239-q5cnn89q8u0p83utccgdsdjbk4eue45a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aurabrix.learnCraft"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
