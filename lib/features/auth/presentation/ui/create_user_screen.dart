@@ -5,29 +5,36 @@ import 'package:learn_craft/core/utils/app_toast.dart';
 import 'package:learn_craft/core/utils/extensions.dart';
 import 'package:learn_craft/core/widgets/custom_textfield.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class CreateUserScreen extends StatefulWidget {
+  const CreateUserScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<CreateUserScreen> createState() => _CreateUserScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _CreateUserScreenState extends State<CreateUserScreen> {
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _onLogin() {
+  void _onContinue() {
+    final username = _usernameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
+    if (username.isEmpty) {
+      AppToast.error(context, 'Please enter a username');
+      return;
+    }
     if (email.isEmpty) {
       AppToast.error(context, 'Please enter your email');
       return;
@@ -37,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     if (password.isEmpty) {
-      AppToast.error(context, 'Please enter your password');
+      AppToast.error(context, 'Please enter a password');
       return;
     }
     if (password.length < 8) {
@@ -45,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // TODO: trigger AuthCubit login
+    context.push(AppPaths.otp, extra: email);
   }
 
   @override
@@ -54,11 +61,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              48.vBox,
+              Text(
+                'Create account',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              8.vBox,
+              Text(
+                'Fill in your details to get started.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface.withOpacity(0.55),
+                ),
+              ),
+              40.vBox,
+              CustomTextfield(
+                label: 'Username',
+                hint: 'e.g. johndoe',
+                controller: _usernameController,
+                prefixIcon: const Icon(Icons.person_outline),
+              ),
+              16.vBox,
               CustomTextfield(
                 label: 'Email',
                 hint: 'you@example.com',
@@ -83,12 +112,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() => _obscurePassword = !_obscurePassword),
                 ),
               ),
-              24.vBox,
+              32.vBox,
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _onLogin,
-                  child: const Text('Login'),
+                  onPressed: _onContinue,
+                  child: const Text('Continue'),
                 ),
               ),
               24.vBox,
@@ -96,13 +125,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't have an account? ",
+                    'Already have an account? ',
                     style: theme.textTheme.bodySmall,
                   ),
                   GestureDetector(
-                    onTap: () => context.push(AppPaths.createUser),
+                    onTap: () => context.pop(),
                     child: Text(
-                      'Sign up',
+                      'Log in',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.w600,

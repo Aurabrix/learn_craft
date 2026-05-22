@@ -1,6 +1,8 @@
 class AppPaths {
   AppPaths._();
 
-  static String initial = '/';
-  static String login = '/login';
+  static const String initial    = '/';
+  static const String login      = '/login';
+  static const String createUser = '/create-user';
+  static const String otp        = '/otp';
 }
