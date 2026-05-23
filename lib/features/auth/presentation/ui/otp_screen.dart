@@ -76,7 +76,7 @@ class _OtpScreenState extends State<OtpScreen> {
               Text(
                 'We sent a 6-digit code to',
                 style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.55),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                 ),
               ),
               4.vBox,
@@ -113,7 +113,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   Text(
                     "Didn't receive a code? ",
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.55),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.55),
                     ),
                   ),
                   GestureDetector(
@@ -173,7 +173,7 @@ class _OtpBox extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-              color: theme.colorScheme.outline.withOpacity(0.4),
+              color: theme.colorScheme.outline.withValues(alpha: 0.4),
             ),
           ),
           focusedBorder: OutlineInputBorder(
