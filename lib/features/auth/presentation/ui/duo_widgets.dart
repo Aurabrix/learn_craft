@@ -28,6 +28,7 @@ class DuoTextField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.suffixIcon,
+    this.onChanged,
   });
 
   final TextEditingController controller;
@@ -35,6 +36,7 @@ class DuoTextField extends StatelessWidget {
   final bool obscureText;
   final TextInputType keyboardType;
   final Widget? suffixIcon;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class DuoTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
+      onChanged: onChanged,
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,

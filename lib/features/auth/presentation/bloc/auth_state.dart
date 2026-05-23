@@ -13,3 +13,18 @@ final class AuthFailure extends AuthState {
 
   AuthFailure(this.message);
 }
+
+// ── Username check states ────────────────────────────────────
+final class UsernameChecking extends AuthState {}
+
+final class UsernameAvailable extends AuthState {
+  final String username;
+
+  UsernameAvailable(this.username);
+}
+
+final class UsernameUnavailable extends AuthState {
+  final String username;
+
+  UsernameUnavailable(this.username);
+}

@@ -16,8 +16,18 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     required String email,
     required String password,
+    required String avatarUrl,
   }) =>
-      remoteDataSource.createUser(name: name, email: email, password: password);
+      remoteDataSource.createUser(
+        name: name,
+        email: email,
+        password: password,
+        avatarUrl: avatarUrl,
+      );
+
+  @override
+  Future<bool> isUsernameAvailable(String username) =>
+      remoteDataSource.isUsernameAvailable(username);
 
   @override
   Future<void> logout() => remoteDataSource.logout();

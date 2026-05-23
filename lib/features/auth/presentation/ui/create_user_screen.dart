@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_craft/core/constants/app_firebase.dart';
@@ -25,6 +27,29 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   final _passwordCtrl = TextEditingController();
   bool _obscure = true;
 
+  // Username availability
+  Timer? _debounce;
+  bool? _usernameAvailable;   // null = not checked, true = available, false = taken
+  bool _usernameChecking = false;
+
+  void _onUsernameChanged(String value) {
+    _debounce?.cancel();
+    final trimmed = value.trim();
+
+    if (trimmed.length < 3) {
+      setState(() {
+        _usernameAvailable = null;
+        _usernameChecking = false;
+      });
+      return;
+    }
+
+    setState(() => _usernameChecking = true);
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+      context.read<AuthBloc>().add(CheckUsernameRequested(trimmed));
+    });
+  }
+
   // ── Navigation ──────────────────────────────────────────────
   void _onNext() {
     if (_step == 0) {
@@ -34,8 +59,21 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       }
       setState(() => _step = 1);
     } else if (_step == 1) {
-      if (_usernameCtrl.text.trim().isEmpty) {
+      final username = _usernameCtrl.text.trim();
+      if (username.isEmpty) {
         AppToast.error(context, 'Please enter a username');
+        return;
+      }
+      if (username.length < 3) {
+        AppToast.error(context, 'Username must be at least 3 characters');
+        return;
+      }
+      if (_usernameAvailable == false) {
+        AppToast.error(context, 'Username is already taken');
+        return;
+      }
+      if (_usernameChecking) {
+        AppToast.error(context, 'Checking username, please wait...');
         return;
       }
       setState(() => _step = 2);
@@ -85,6 +123,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _usernameCtrl.dispose();
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
@@ -106,6 +145,15 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthFailure) AppToast.error(context, state.message);
+        if (state is UsernameAvailable) {
+          setState(() { _usernameAvailable = true; _usernameChecking = false; });
+        }
+        if (state is UsernameUnavailable) {
+          setState(() { _usernameAvailable = false; _usernameChecking = false; });
+        }
+        if (state is UsernameChecking) {
+          setState(() => _usernameChecking = true);
+        }
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -177,7 +225,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                               onSelect: (url) =>
                                   setState(() => _selectedAvatarUrl = url),
                             ),
-                            _UsernameStep(controller: _usernameCtrl),
+                            _UsernameStep(
+                              controller: _usernameCtrl,
+                              onChanged: _onUsernameChanged,
+                              isAvailable: _usernameAvailable,
+                              isChecking: _usernameChecking,
+                            ),
                             _EmailPasswordStep(
                               emailCtrl:    _emailCtrl,
                               passwordCtrl: _passwordCtrl,
@@ -478,8 +531,17 @@ class _AvatarTileState extends State<_AvatarTile>
 
 // ── Step 1: Username ─────────────────────────────────────────
 class _UsernameStep extends StatelessWidget {
-  const _UsernameStep({required this.controller});
+  const _UsernameStep({
+    required this.controller,
+    required this.onChanged,
+    required this.isAvailable,
+    required this.isChecking,
+  });
+
   final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+  final bool? isAvailable;
+  final bool isChecking;
 
   @override
   Widget build(BuildContext context) {
@@ -491,8 +553,99 @@ class _UsernameStep extends StatelessWidget {
         DuoTextField(
           controller: controller,
           hint: 'e.g. QuizMaster99',
+          onChanged: onChanged,
+        ),
+        const SizedBox(height: 10),
+
+        // ── Availability status chip ──
+        AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          transitionBuilder: (child, anim) => SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, -0.3),
+              end: Offset.zero,
+            ).animate(anim),
+            child: FadeTransition(opacity: anim, child: child),
+          ),
+          child: isChecking
+              ? _buildChip(
+                  key: const ValueKey('checking'),
+                  icon: _buildSpinner(),
+                  text: 'Checking...',
+                  bgColor: const Color(0xFFE8F4FD),
+                  fgColor: const Color(0xFF1CB0F6),
+                  borderColor: const Color(0xFFB3DEFA),
+                )
+              : isAvailable == true
+                  ? _buildChip(
+                      key: const ValueKey('available'),
+                      icon: const Icon(Icons.check_circle_rounded, size: 16,
+                          color: Color(0xFF58CC02)),
+                      text: 'Available!',
+                      bgColor: const Color(0xFFEAFBE0),
+                      fgColor: const Color(0xFF58CC02),
+                      borderColor: const Color(0xFFC4EDA8),
+                    )
+                  : isAvailable == false
+                      ? _buildChip(
+                          key: const ValueKey('taken'),
+                          icon: const Icon(Icons.cancel_rounded, size: 16,
+                              color: Color(0xFFFF4B4B)),
+                          text: 'Already taken',
+                          bgColor: const Color(0xFFFFF0F0),
+                          fgColor: const Color(0xFFFF4B4B),
+                          borderColor: const Color(0xFFFFCCCC),
+                        )
+                      : const SizedBox.shrink(key: ValueKey('empty')),
         ),
       ],
+    );
+  }
+
+  static Widget _buildSpinner() {
+    return const SizedBox(
+      width: 14,
+      height: 14,
+      child: CircularProgressIndicator(
+        strokeWidth: 2,
+        color: Color(0xFF1CB0F6),
+      ),
+    );
+  }
+
+  static Widget _buildChip({
+    required Key key,
+    required Widget icon,
+    required String text,
+    required Color bgColor,
+    required Color fgColor,
+    required Color borderColor,
+  }) {
+    return Container(
+      key: key,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor, width: 1.5),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const SizedBox(width: 8),
+          Text(
+            text,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: fgColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

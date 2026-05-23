@@ -9,6 +9,12 @@ class CreateUserUseCase {
     required String name,
     required String email,
     required String password,
+    required String avatarUrl,
   }) =>
-      repository.createUser(name: name, email: email, password: password);
+      repository.createUser(
+        name: name,
+        email: email,
+        password: password,
+        avatarUrl: avatarUrl,
+      );
 }

@@ -23,4 +23,10 @@ final class CreateUserRequested extends AuthEvent {
   });
 }
 
+final class CheckUsernameRequested extends AuthEvent {
+  final String username;
+
+  CheckUsernameRequested(this.username);
+}
+
 final class LogoutRequested extends AuthEvent {}

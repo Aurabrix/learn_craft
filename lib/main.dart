@@ -9,6 +9,7 @@ import 'package:learn_craft/core/theme/app_theme.dart';
 import 'package:learn_craft/core/theme/cubit/theme_cubit.dart';
 import 'package:learn_craft/features/auth/data/datasources/auth_remote_data_source_impl.dart';
 import 'package:learn_craft/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:learn_craft/features/auth/domain/usecases/check_username_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/create_user_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/login_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/logout_use_case.dart';
@@ -45,6 +46,7 @@ class _MyAppState extends State<MyApp> {
       loginUseCase: LoginUseCase(repository),
       createUserUseCase: CreateUserUseCase(repository),
       logoutUseCase: LogoutUseCase(repository),
+      checkUsernameUseCase: CheckUsernameUseCase(repository),
     );
     _routerNotifier = RouterNotifier(_authBloc);
     _router = buildRouter(_routerNotifier);
