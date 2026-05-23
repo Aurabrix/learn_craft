@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/constants/app_paths.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
+import 'package:learn_craft/core/widgets/app_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -102,7 +103,7 @@ class WelcomeScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child: ElevatedButton(
+                          child: AppElevatedButton(
                             onPressed: () => context.go(AppPaths.createUser),
                             child: const Text('Get Started'),
                           ),
@@ -114,7 +115,7 @@ class WelcomeScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child: OutlinedButton(
+                          child: AppOutlinedButton(
                             onPressed: () => context.go(AppPaths.login),
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.brandPrimary,

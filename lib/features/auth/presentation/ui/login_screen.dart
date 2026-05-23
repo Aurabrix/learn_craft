@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/constants/app_paths.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
+import 'package:learn_craft/core/services/feedback_service.dart';
+import 'package:learn_craft/core/widgets/app_button.dart';
 import 'package:learn_craft/core/widgets/custom_textfield.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
 
@@ -151,9 +153,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     : Icons.visibility_outlined,
                                 color: AppColors.grey500,
                               ),
-                              onPressed: () => setState(
-                                () => _obscurePassword = !_obscurePassword,
-                              ),
+                              onPressed: () {
+                                FeedbackService.instance.tap();
+                                setState(() => _obscurePassword = !_obscurePassword);
+                              },
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -162,7 +165,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               return SizedBox(
                                 width: double.infinity,
                                 height: 56,
-                                child: ElevatedButton(
+                                child: AppElevatedButton(
                                   onPressed:
                                       state is AuthLoading ? null : _onLogin,
                                   child: state is AuthLoading
@@ -190,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .withValues(alpha: 0.55),
                                 ),
                               ),
-                              GestureDetector(
+                              TapFeedback(
                                 onTap: () => context.push(AppPaths.createUser),
                                 child: Text(
                                   'Sign up',

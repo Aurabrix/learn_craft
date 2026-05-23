@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
+import 'package:learn_craft/core/services/feedback_service.dart';
+import 'package:learn_craft/core/widgets/app_button.dart';
 import 'package:learn_craft/core/widgets/custom_textfield.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
 
@@ -167,9 +169,10 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                                     : Icons.visibility_outlined,
                                 color: AppColors.grey500,
                               ),
-                              onPressed: () => setState(
-                                () => _obscurePassword = !_obscurePassword,
-                              ),
+                              onPressed: () {
+                                FeedbackService.instance.tap();
+                                setState(() => _obscurePassword = !_obscurePassword);
+                              },
                             ),
                           ),
                           const SizedBox(height: 32),
@@ -178,7 +181,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                               return SizedBox(
                                 width: double.infinity,
                                 height: 56,
-                                child: ElevatedButton(
+                                child: AppElevatedButton(
                                   onPressed:
                                       state is AuthLoading ? null : _onContinue,
                                   child: state is AuthLoading
@@ -206,7 +209,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                                       .withValues(alpha: 0.55),
                                 ),
                               ),
-                              GestureDetector(
+                              TapFeedback(
                                 onTap: () => context.pop(),
                                 child: Text(
                                   'Sign in',
@@ -233,7 +236,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                 child: Row(
                   children: [
                     // Back button
-                    GestureDetector(
+                    TapFeedback(
                       onTap: () => context.pop(),
                       child: Container(
                         width: 40,

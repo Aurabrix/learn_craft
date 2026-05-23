@@ -13,11 +13,14 @@ import 'package:learn_craft/features/auth/domain/usecases/create_user_use_case.d
 import 'package:learn_craft/features/auth/domain/usecases/login_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/logout_use_case.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Touch the singleton so WAV bytes are generated before first interaction
+  FeedbackService.instance;
   runApp(const MyApp());
 }
 

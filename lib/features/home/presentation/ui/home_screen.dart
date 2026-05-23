@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
+import 'package:learn_craft/core/widgets/app_button.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,10 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              FeedbackService.instance.tap();
+              Navigator.of(context).pop();
+            },
             child: const Text('Cancel'),
           ),
-          ElevatedButton(
+          AppElevatedButton(
             onPressed: () {
               Navigator.of(context).pop();
               context.read<AuthBloc>().add(LogoutRequested());
@@ -101,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColors.gameAmber,
                     ),
                     const SizedBox(width: 8),
-                    GestureDetector(
+                    TapFeedback(
                       onTap: _showLogoutDialog,
                       child: Container(
                         width: 40,
@@ -229,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            ElevatedButton(
+                            AppElevatedButton(
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
@@ -478,7 +483,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: BottomNavigationBar(
               currentIndex: _selectedIndex,
-              onTap: (index) => setState(() => _selectedIndex = index),
+              onTap: (index) {
+                FeedbackService.instance.tap();
+                setState(() => _selectedIndex = index);
+              },
               type: BottomNavigationBarType.fixed,
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -647,7 +655,7 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return TapFeedback(
       onTap: () {},
       child: Container(
         decoration: BoxDecoration(

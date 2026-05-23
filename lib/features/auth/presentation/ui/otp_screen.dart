@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
+import 'package:learn_craft/core/widgets/app_button.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key, required this.email});
@@ -142,7 +143,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         SizedBox(
                           width: double.infinity,
                           height: 56,
-                          child: ElevatedButton(
+                          child: AppElevatedButton(
                             onPressed: _onVerify,
                             child: const Text('Verify Code'),
                           ),
@@ -158,7 +159,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     .withValues(alpha: 0.5),
                               ),
                             ),
-                            GestureDetector(
+                            TapFeedback(
                               onTap: () {
                                 // TODO: resend OTP
                               },
@@ -186,7 +187,7 @@ class _OtpScreenState extends State<OtpScreen> {
               padding: const EdgeInsets.fromLTRB(20, 20, 28, 0),
               child: Row(
                 children: [
-                  GestureDetector(
+                  TapFeedback(
                     onTap: () => context.pop(),
                     child: Container(
                       width: 40,
