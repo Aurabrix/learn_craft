@@ -8,11 +8,17 @@ class AppToast {
   static const _greenFill  = Color(0xFF58CC02);
   static const _greenShadow = Color(0xFF46A302);
 
+  static OverlayEntry? _currentEntry;
+
   static void show(
     BuildContext context,
     String message, {
     bool isError = true,
   }) {
+    // Remove the previous toast immediately
+    _currentEntry?.remove();
+    _currentEntry = null;
+
     final overlay = Overlay.of(context);
     late OverlayEntry entry;
 
@@ -25,10 +31,14 @@ class AppToast {
         icon: isError
             ? Icons.cancel_rounded
             : Icons.check_circle_rounded,
-        onDone: () => entry.remove(),
+        onDone: () {
+          entry.remove();
+          if (_currentEntry == entry) _currentEntry = null;
+        },
       ),
     );
 
+    _currentEntry = entry;
     overlay.insert(entry);
   }
 
