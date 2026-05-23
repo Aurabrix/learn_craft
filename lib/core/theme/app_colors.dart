@@ -8,6 +8,17 @@ class AppColors {
   static const Color brandSecondary = Color(0xFF03DAC6);
   static const Color brandAccent = Color(0xFFFF6584);
 
+  // Soft & friendly tints
+  static const Color softLavender = Color(0xFFF5F3FF);
+  static const Color brandPrimaryTint = Color(0xFFEDE9FF);
+  static const Color softBorder = Color(0xFFE2DCFF);
+
+  // Game accent colors
+  static const Color gameAmber = Color(0xFFFFB627);
+  static const Color gameCoral = Color(0xFFFF6B6B);
+  static const Color gameTeal = Color(0xFF4ECDC4);
+  static const Color gameBlue = Color(0xFF45B7D1);
+
   // Light surface
   static const Color lightBackground = Color(0xFFF8F9FA);
   static const Color lightSurface = Color(0xFFFFFFFF);
