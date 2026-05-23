@@ -24,6 +24,7 @@ class AppTheme {
       textTheme: AppTextStyles.textTheme.apply(
         bodyColor: AppColors.lightOnSurface,
         displayColor: AppColors.lightOnSurface,
+        fontFamily: 'Nunito',
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.lightSurface,
@@ -95,6 +96,7 @@ class AppTheme {
       textTheme: AppTextStyles.textTheme.apply(
         bodyColor: AppColors.darkOnSurface,
         displayColor: AppColors.darkOnSurface,
+        fontFamily: 'Nunito',
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.darkSurface,

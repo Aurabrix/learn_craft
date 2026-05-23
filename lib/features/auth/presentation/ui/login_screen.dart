@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/constants/app_paths.dart';
-import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
-import 'package:learn_craft/core/services/feedback_service.dart';
-import 'package:learn_craft/core/widgets/app_button.dart';
-import 'package:learn_craft/core/widgets/custom_textfield.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
+import 'duo_widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  final _emailController    = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
@@ -29,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onLogin() {
-    final email = _emailController.text.trim();
+    final email    = _emailController.text.trim();
     final password = _passwordController.text;
 
     if (email.isEmpty) {
@@ -50,206 +47,152 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     context.read<AuthBloc>().add(
-          LoginRequested(email: email, password: password),
-        );
+      LoginRequested(email: email, password: password),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state is AuthFailure) {
-          AppToast.error(context, state.message);
-        }
+        if (state is AuthFailure) AppToast.error(context, state.message);
       },
       child: Scaffold(
-        backgroundColor: AppColors.brandPrimary,
-        body: Stack(
-          children: [
-            // Gradient hero background
-            Container(
-              height: screenHeight * 0.42,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [Color(0xFF8B7FFF), AppColors.brandPrimary],
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // ── Top bar ─────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: DuoBackButton(onTap: () => context.pop()),
                 ),
               ),
-            ),
 
-            // Decorative circles on hero
-            Positioned(
-              top: -50,
-              right: -50,
-              child: Container(
-                width: 180,
-                height: 180,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.07),
-                ),
-              ),
-            ),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
 
-            // White card form area
-            Column(
-              children: [
-                SizedBox(height: screenHeight * 0.30),
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                    ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(28, 32, 28, 32),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      // ── Title ──────────────────────────
+                      Text(
+                        'Welcome back!',
+                        style: theme.textTheme.headlineMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                          color: const Color(0xFF1A1A2E),
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Log in to continue your streak 🔥',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: const Color(0xFF777777),
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      // ── Email ──────────────────────────
+                      DuoLabel('EMAIL ADDRESS'),
+                      const SizedBox(height: 6),
+                      DuoTextField(
+                        controller: _emailController,
+                        hint: 'you@example.com',
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // ── Password ───────────────────────
+                      DuoLabel('PASSWORD'),
+                      const SizedBox(height: 6),
+                      DuoTextField(
+                        controller: _passwordController,
+                        hint: '••••••••',
+                        obscureText: _obscurePassword,
+                        suffixIcon: GestureDetector(
+                          onTap: () => setState(
+                              () => _obscurePassword = !_obscurePassword),
+                          child: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off_outlined
+                                : Icons.visibility_outlined,
+                            color: const Color(0xFFAAAAAA),
+                            size: 20,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // ── Forgot password ────────────────
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Text(
+                            'Forgot password?',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFF1CB0F6),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      // ── Login button ───────────────────
+                      BlocBuilder<AuthBloc, AuthState>(
+                        builder: (context, state) {
+                          return DuoGreenButton(
+                            label: 'LOG IN',
+                            isLoading: state is AuthLoading,
+                            onTap: state is AuthLoading ? null : _onLogin,
+                          );
+                        },
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Sign up link ───────────────────
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Welcome back!',
-                            style: theme.textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: -0.5,
-                              color: AppColors.lightOnSurface,
+                            "Don't have an account? ",
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: const Color(0xFF777777),
                             ),
                           ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Sign in to continue your journey',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.lightOnSurface.withValues(alpha: 0.5),
-                            ),
-                          ),
-                          const SizedBox(height: 28),
-                          CustomTextfield(
-                            label: 'Email',
-                            hint: 'you@example.com',
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: Icon(
-                              Icons.mail_outline_rounded,
-                              color: AppColors.brandPrimary.withValues(alpha: 0.7),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          CustomTextfield(
-                            label: 'Password',
-                            hint: 'Min. 8 characters',
-                            controller: _passwordController,
-                            obscureText: _obscurePassword,
-                            prefixIcon: Icon(
-                              Icons.lock_outline_rounded,
-                              color: AppColors.brandPrimary.withValues(alpha: 0.7),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obscurePassword
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: AppColors.grey500,
+                          GestureDetector(
+                            onTap: () => context.push(AppPaths.createUser),
+                            child: Text(
+                              'SIGN UP',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: const Color(0xFF58CC02),
+                                fontWeight: FontWeight.w900,
                               ),
-                              onPressed: () {
-                                FeedbackService.instance.tap();
-                                setState(() => _obscurePassword = !_obscurePassword);
-                              },
                             ),
-                          ),
-                          const SizedBox(height: 32),
-                          BlocBuilder<AuthBloc, AuthState>(
-                            builder: (context, state) {
-                              return SizedBox(
-                                width: double.infinity,
-                                height: 56,
-                                child: AppElevatedButton(
-                                  onPressed:
-                                      state is AuthLoading ? null : _onLogin,
-                                  child: state is AuthLoading
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 2,
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : const Text('Sign In'),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Don't have an account? ",
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.lightOnSurface
-                                      .withValues(alpha: 0.55),
-                                ),
-                              ),
-                              TapFeedback(
-                                onTap: () => context.push(AppPaths.createUser),
-                                child: Text(
-                                  'Sign up',
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: AppColors.brandPrimary,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
-                    ),
+
+                      const SizedBox(height: 32),
+                    ],
                   ),
                 ),
-              ],
-            ),
-
-            // Hero content (logo + branding over gradient)
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(28, 24, 28, 0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.quiz_rounded,
-                        color: Colors.white,
-                        size: 26,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Learn Craft',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
