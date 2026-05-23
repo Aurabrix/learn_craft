@@ -13,11 +13,13 @@ final class CreateUserRequested extends AuthEvent {
   final String name;
   final String email;
   final String password;
+  final String avatarUrl;
 
   CreateUserRequested({
     required this.name,
     required this.email,
     required this.password,
+    this.avatarUrl = '',
   });
 }
 
