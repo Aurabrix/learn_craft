@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:learn_craft/core/constants/app_paths.dart';
 import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/widgets/app_button.dart';
@@ -337,12 +339,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         letterSpacing: -0.3,
                       ),
                     ),
-                    Text(
-                      'See all',
-                      style: TextStyle(
-                        color: AppColors.brandPrimary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                    InkWell(
+                      onTap: () {
+                        context.push(AppPaths.upload);
+                      },
+                      child: Text(
+                        'See all',
+                        style: TextStyle(
+                          color: AppColors.brandPrimary,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ],

@@ -4,6 +4,7 @@ import 'package:learn_craft/core/routes/router_notifier.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:learn_craft/features/auth/presentation/ui/create_user_screen.dart';
 import 'package:learn_craft/features/auth/presentation/ui/welcome_screen.dart';
+import 'package:learn_craft/features/upload/presentation/ui/upload_screen.dart';
 import '../../features/auth/presentation/ui/login_screen.dart';
 import '../../features/auth/presentation/ui/splash_sreen.dart';
 import '../../features/home/presentation/ui/home_screen.dart';
@@ -48,6 +49,10 @@ GoRouter buildRouter(RouterNotifier notifier) => GoRouter(
         GoRoute(
           path: AppPaths.home,
           builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          path: AppPaths.upload,
+          builder: (context, state) => const UploadScreen(),
         ),
       ],
     );
