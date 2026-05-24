@@ -7,6 +7,8 @@ import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/widgets/app_button.dart';
 import 'package:learn_craft/features/course/data/datasources/course_seed_service.dart';
+import 'package:learn_craft/features/course/presentation/cubit/course_cubit.dart';
+import 'package:learn_craft/features/course/presentation/ui/explore_screen.dart';
 import 'package:learn_craft/features/profile/presentation/cubit/user_cubit.dart';
 import 'package:learn_craft/features/profile/presentation/ui/profile_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -29,11 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _seedCourseData(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
+    final cubit = context.read<CourseCubit>();
     try {
       await CourseSeedService().seedSampleCourse();
+      cubit.loadCourses();
       messenger.showSnackBar(
         const SnackBar(
-          content: Text('✅ Sample course + 5 lessons seeded to Firestore!'),
+          content: Text('Sample course + 5 lessons seeded!'),
           backgroundColor: AppColors.green,
         ),
       );
@@ -49,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   static const _screens = [
     _HomeBody(),
-    SizedBox(), // Explore placeholder
+    ExploreScreen(),
     SizedBox(), // Ranks placeholder
     ProfileScreen(),
   ];

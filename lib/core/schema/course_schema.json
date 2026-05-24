@@ -3,6 +3,7 @@
   "document": "{courseId}",
   "sample": {
     "id": "course_001",
+    "uid": "abc123xyz",
     "title": "Flutter Basics",
     "description": "Learn the fundamentals of Flutter development",
     "category": "Mobile Development",
@@ -18,6 +19,7 @@
   },
   "fields": {
     "id": { "type": "string", "description": "Unique course ID" },
+    "uid": { "type": "string", "description": "Firebase Auth UID of the course owner" },
     "title": { "type": "string", "description": "Course display title" },
     "description": { "type": "string", "description": "Short course description" },
     "category": { "type": "string", "description": "Main category (e.g. Mobile Development)" },

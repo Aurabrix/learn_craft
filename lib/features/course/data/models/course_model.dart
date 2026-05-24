@@ -3,6 +3,7 @@ import 'package:learn_craft/features/course/domain/entities/course_entity.dart';
 class CourseModel extends CourseEntity {
   const CourseModel({
     required super.id,
+    required super.uid,
     required super.title,
     required super.description,
     required super.category,
@@ -20,6 +21,7 @@ class CourseModel extends CourseEntity {
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     return CourseModel(
       id: json['id'] ?? '',
+      uid: json['uid'] ?? '',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
       category: json['category'] ?? '',
@@ -38,6 +40,7 @@ class CourseModel extends CourseEntity {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'uid': uid,
       'title': title,
       'description': description,
       'category': category,

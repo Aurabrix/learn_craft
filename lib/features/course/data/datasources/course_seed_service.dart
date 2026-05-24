@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Seeds sample course + lessons + quizzes data into Firestore.
 class CourseSeedService {
@@ -10,11 +11,13 @@ class CourseSeedService {
   /// Writes the sample course document, lessons subcollection, and quizzes.
   /// Returns `true` on success.
   Future<bool> seedSampleCourse() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
     const courseId = 'course_001';
     final courseRef = _firestore.collection('courses').doc(courseId);
 
     final courseData = {
       'id': courseId,
+      'uid': uid,
       'title': 'Flutter Basics',
       'description': 'Learn the fundamentals of Flutter development',
       'category': 'Mobile Development',
