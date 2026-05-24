@@ -12,8 +12,9 @@ class CourseSeedService {
   /// Returns `true` on success.
   Future<bool> seedSampleCourse() async {
     final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
-    const courseId = 'course_001';
-    final courseRef = _firestore.collection('courses').doc(courseId);
+    // Auto-generate a unique ID so each seed adds a new course
+    final courseRef = _firestore.collection('courses').doc();
+    final courseId = courseRef.id;
 
     final courseData = {
       'id': courseId,
@@ -185,15 +186,23 @@ class CourseSeedService {
     batch.set(courseRef, courseData);
 
     for (final lesson in lessons) {
-      final lessonId = lesson['lessonId'] as String;
-      final lessonRef = courseRef.collection('lessons').doc(lessonId);
-      batch.set(lessonRef, lesson);
+      final originalLessonId = lesson['lessonId'] as String;
+      // Generate unique lesson doc ref
+      final lessonRef = courseRef.collection('lessons').doc();
+      final uniqueLessonId = lessonRef.id;
+      final lessonData = Map<String, dynamic>.from(lesson)
+        ..['id'] = uniqueLessonId
+        ..['lessonId'] = uniqueLessonId
+        ..['courseId'] = courseId;
+      batch.set(lessonRef, lessonData);
 
       // Add quiz if one exists for this lesson
-      if (quizzes.containsKey(lessonId)) {
-        final quizData = quizzes[lessonId]!;
-        final quizRef =
-            lessonRef.collection('quizzes').doc(quizData['id'] as String);
+      if (quizzes.containsKey(originalLessonId)) {
+        final quizData = Map<String, dynamic>.from(quizzes[originalLessonId]!)
+          ..['lessonId'] = uniqueLessonId
+          ..['courseId'] = courseId;
+        final quizRef = lessonRef.collection('quizzes').doc();
+        quizData['id'] = quizRef.id;
         batch.set(quizRef, quizData);
       }
     }
