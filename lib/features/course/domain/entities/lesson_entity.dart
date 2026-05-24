@@ -4,6 +4,7 @@ class LessonEntity {
   final String lessonId;
   final String topic;
   final String summary;
+  final String content;
   final int order;
   final bool isCompleted;
   final bool isCurrentLesson;
@@ -15,6 +16,7 @@ class LessonEntity {
     required this.lessonId,
     required this.topic,
     required this.summary,
+    required this.content,
     required this.order,
     required this.isCompleted,
     required this.isCurrentLesson,
