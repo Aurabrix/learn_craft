@@ -50,6 +50,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // APNS token not yet available (simulator or permissions not granted)
     }
 
+    final now = DateTime.now();
+
     final userModel = UserModel(
       id: user.uid,
       name: name,
@@ -57,9 +59,16 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       profileImage: avatarUrl,
       deviceToken: fcmToken,
       deviceType: Platform.isIOS ? 'ios' : 'android',
-      appVersion: '',
+      appVersion: '1.0.0',
       isPremium: false,
-      createdAt: DateTime.now(),
+      createdAt: now,
+      updatedAt: now,
+      lastLoginAt: now,
+      enrolledCourses: const [],
+      totalAiCredits: 100,
+      usedAiCredits: 0,
+      preferredLanguage: 'en',
+      xpPoints: 0,
     );
 
     await _firestore.collection('users').doc(user.uid).set(userModel.toJson());

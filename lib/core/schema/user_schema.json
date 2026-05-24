@@ -1,0 +1,40 @@
+{
+  "collection": "users",
+  "document": "{userId}",
+  "sample": {
+    "id": "abc123xyz",
+    "name": "QuizMaster99",
+    "email": "quizmaster@gmail.com",
+    "profileImage": "https://firebasestorage.googleapis.com/v0/b/learn-craft-1608.firebasestorage.app/o/avatars%2Fch11.png?alt=media&token=xxx",
+    "deviceToken": "fJqWSNxVRPCxqIxSL5YRjJ:APA91bG9bHhP...",
+    "deviceType": "android",
+    "appVersion": "1.0.0",
+    "isPremium": false,
+    "createdAt": "2026-05-23T17:35:40.616309",
+    "updatedAt": "2026-05-23T17:35:40.616309",
+    "lastLoginAt": "2026-05-23T17:35:40.616309",
+    "enrolledCourses": ["course_001", "course_002"],
+    "totalAiCredits": 100,
+    "usedAiCredits": 25,
+    "preferredLanguage": "en",
+    "xpPoints": 1000
+  },
+  "fields": {
+    "id": { "type": "string", "description": "Firebase Auth UID" },
+    "name": { "type": "string", "description": "Display username (unique)" },
+    "email": { "type": "string", "description": "User email address" },
+    "profileImage": { "type": "string", "description": "Avatar URL from Firebase Storage" },
+    "deviceToken": { "type": "string", "description": "FCM push notification token" },
+    "deviceType": { "type": "string", "description": "ios | android" },
+    "appVersion": { "type": "string", "description": "Current app version" },
+    "isPremium": { "type": "bool", "description": "Premium subscription status" },
+    "createdAt": { "type": "string (ISO 8601)", "description": "Account creation timestamp" },
+    "updatedAt": { "type": "string (ISO 8601)", "description": "Last profile update timestamp" },
+    "lastLoginAt": { "type": "string (ISO 8601)", "description": "Last login timestamp" },
+    "enrolledCourses": { "type": "List<string>", "description": "Course IDs the user is enrolled in" },
+    "totalAiCredits": { "type": "int", "description": "Total AI credits allocated (default: 100)" },
+    "usedAiCredits": { "type": "int", "description": "AI credits consumed so far" },
+    "preferredLanguage": { "type": "string", "description": "Language code (default: en)" },
+    "xpPoints": { "type": "int", "description": "Experience points earned" }
+  }
+}
