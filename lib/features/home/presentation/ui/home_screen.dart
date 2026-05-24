@@ -6,6 +6,7 @@ import 'package:learn_craft/core/constants/app_paths.dart';
 import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/widgets/app_button.dart';
+import 'package:learn_craft/features/course/data/datasources/course_seed_service.dart';
 import 'package:learn_craft/features/profile/presentation/cubit/user_cubit.dart';
 import 'package:learn_craft/features/profile/presentation/ui/profile_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -26,6 +27,26 @@ class _HomeScreenState extends State<HomeScreen> {
     context.read<UserCubit>().loadUser();
   }
 
+  Future<void> _seedCourseData(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await CourseSeedService().seedSampleCourse();
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('✅ Sample course + 5 lessons seeded to Firestore!'),
+          backgroundColor: AppColors.green,
+        ),
+      );
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text('❌ Seed failed: $e'),
+          backgroundColor: AppColors.red,
+        ),
+      );
+    }
+  }
+
   static const _screens = [
     _HomeBody(),
     SizedBox(), // Explore placeholder
@@ -41,6 +62,21 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _selectedIndex,
         children: _screens,
       ),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton.extended(
+              onPressed: () => _seedCourseData(context),
+              backgroundColor: AppColors.green,
+              icon: const Icon(Icons.cloud_upload_rounded, color: Colors.white),
+              label: const Text(
+                'SEED DATA',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            )
+          : null,
       bottomNavigationBar: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         child: BackdropFilter(

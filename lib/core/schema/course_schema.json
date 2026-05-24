@@ -1,0 +1,62 @@
+{
+  "collection": "courses",
+  "document": "{courseId}",
+  "sample": {
+    "id": "course_001",
+    "title": "Flutter Basics",
+    "description": "Learn the fundamentals of Flutter development",
+    "category": "Mobile Development",
+    "subcategory": "Cross-Platform",
+    "level": "Beginner",
+    "totalTokensUsed": 45000,
+    "attachmentUrl": "https://example.com/attachments/flutter-basics-course.pdf",
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "totalLessons": 12,
+    "totalQuizzes": 3,
+    "skillsTaught": ["Dart", "Widgets", "State Management", "UI Design"],
+    "isPublished": true
+  },
+  "fields": {
+    "id": { "type": "string", "description": "Unique course ID" },
+    "title": { "type": "string", "description": "Course display title" },
+    "description": { "type": "string", "description": "Short course description" },
+    "category": { "type": "string", "description": "Main category (e.g. Mobile Development)" },
+    "subcategory": { "type": "string", "description": "Subcategory (e.g. Cross-Platform)" },
+    "level": { "type": "string", "description": "Beginner | Intermediate | Advanced" },
+    "totalTokensUsed": { "type": "int", "description": "AI tokens consumed generating this course" },
+    "attachmentUrl": { "type": "string", "description": "Source PDF/DOCX/URL used to generate course" },
+    "createdAt": { "type": "string (ISO 8601)", "description": "Course creation timestamp" },
+    "totalLessons": { "type": "int", "description": "Number of lessons in this course" },
+    "totalQuizzes": { "type": "int", "description": "Number of quizzes in this course" },
+    "skillsTaught": { "type": "List<string>", "description": "Skills/topics covered" },
+    "isPublished": { "type": "bool", "description": "Whether course is visible to user" }
+  },
+  "subcollections": {
+    "lessons": {
+      "document": "{lessonId}",
+      "path": "courses/{courseId}/lessons/{lessonId}",
+      "sample": {
+        "id": "lesson_001",
+        "courseId": "course_001",
+        "lessonId": "lesson_001",
+        "topic": "What is Flutter?",
+        "summary": "Introduction to Flutter framework",
+        "order": 1,
+        "isCompleted": true,
+        "isCurrentLesson": true,
+        "isPublished": true
+      },
+      "fields": {
+        "id": { "type": "string", "description": "Unique lesson ID" },
+        "courseId": { "type": "string", "description": "Parent course ID" },
+        "lessonId": { "type": "string", "description": "Lesson identifier" },
+        "topic": { "type": "string", "description": "Lesson topic title" },
+        "summary": { "type": "string", "description": "Brief lesson summary" },
+        "order": { "type": "int", "description": "Display order within course (1-based)" },
+        "isCompleted": { "type": "bool", "description": "Whether user has completed this lesson" },
+        "isCurrentLesson": { "type": "bool", "description": "Whether this is the active lesson" },
+        "isPublished": { "type": "bool", "description": "Whether lesson is visible" }
+      }
+    }
+  }
+}
