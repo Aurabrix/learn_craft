@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Seeds sample course + lessons data into Firestore.
+/// Seeds sample course + lessons + quizzes data into Firestore.
 class CourseSeedService {
   final FirebaseFirestore _firestore;
 
   CourseSeedService({FirebaseFirestore? firestore})
       : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  /// Writes the sample course document and its lessons subcollection.
+  /// Writes the sample course document, lessons subcollection, and quizzes.
   /// Returns `true` on success.
   Future<bool> seedSampleCourse() async {
     const courseId = 'course_001';
@@ -88,15 +88,101 @@ class CourseSeedService {
       },
     ];
 
+    // Quiz for lesson_001
+    final quizzes = <String, Map<String, dynamic>>{
+      'lesson_001': {
+        'id': 'quiz_001',
+        'courseId': courseId,
+        'lessonId': 'lesson_001',
+        'title': 'What is Flutter? — Quiz',
+        'totalQuestions': 5,
+        'questions': [
+          {
+            'id': 'q_001',
+            'questionText': 'What programming language does Flutter use?',
+            'options': ['Java', 'Dart', 'Kotlin', 'Swift'],
+            'correctOptionIndex': 1,
+            'explanation':
+                'Flutter uses Dart as its programming language, developed by Google.',
+            'xpPoints': 10,
+            'difficulty': 'Beginner',
+          },
+          {
+            'id': 'q_002',
+            'questionText': 'Which company developed Flutter?',
+            'options': ['Apple', 'Microsoft', 'Google', 'Meta'],
+            'correctOptionIndex': 2,
+            'explanation':
+                'Flutter is an open-source UI toolkit created by Google.',
+            'xpPoints': 10,
+            'difficulty': 'Easy',
+          },
+          {
+            'id': 'q_003',
+            'questionText': 'What is a Widget in Flutter?',
+            'options': [
+              'A database table',
+              'A UI building block',
+              'A network request',
+              'A test framework',
+            ],
+            'correctOptionIndex': 1,
+            'explanation':
+                'In Flutter, everything is a widget — the basic building block of the UI.',
+            'xpPoints': 15,
+            'difficulty': 'Beginner',
+          },
+          {
+            'id': 'q_004',
+            'questionText': 'Flutter apps can run on which platforms?',
+            'options': [
+              'Only Android',
+              'Only iOS',
+              'Android and iOS only',
+              'Android, iOS, Web, Desktop',
+            ],
+            'correctOptionIndex': 3,
+            'explanation':
+                'Flutter supports Android, iOS, Web, Windows, macOS, and Linux.',
+            'xpPoints': 15,
+            'difficulty': 'Easy',
+          },
+          {
+            'id': 'q_005',
+            'questionText': 'What is hot reload in Flutter?',
+            'options': [
+              'Restarting the device',
+              'Instantly reflecting code changes without losing state',
+              'Clearing the cache',
+              'Updating the SDK',
+            ],
+            'correctOptionIndex': 1,
+            'explanation':
+                'Hot reload injects updated source code into the running Dart VM without restarting the app.',
+            'xpPoints': 20,
+            'difficulty': 'Beginner',
+          },
+        ],
+      },
+    };
+
     // Use a batch write — atomic, all-or-nothing
     final batch = _firestore.batch();
 
     batch.set(courseRef, courseData);
 
     for (final lesson in lessons) {
-      final lessonRef =
-          courseRef.collection('lessons').doc(lesson['lessonId'] as String);
+      final lessonId = lesson['lessonId'] as String;
+      final lessonRef = courseRef.collection('lessons').doc(lessonId);
       batch.set(lessonRef, lesson);
+
+      // Add quiz if one exists for this lesson
+      if (quizzes.containsKey(lessonId)) {
+        final quizData = quizzes[lessonId]!;
+        final quizRef =
+            lessonRef.collection('quizzes').doc(quizData['id'] as String);
+        batch.set(quizRef, quizData);
+      }
     }
 
     await batch.commit();

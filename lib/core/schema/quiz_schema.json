@@ -1,0 +1,94 @@
+{
+  "collection": "courses/{courseId}/lessons/{lessonId}/quizzes",
+  "document": "{quizId}",
+  "path": "courses/{courseId}/lessons/{lessonId}/quizzes/{quizId}",
+  "sample": {
+    "id": "quiz_001",
+    "courseId": "course_001",
+    "lessonId": "lesson_001",
+    "title": "What is Flutter? — Quiz",
+    "totalQuestions": 5,
+    "questions": [
+      {
+        "id": "q_001",
+        "questionText": "What programming language does Flutter use?",
+        "options": ["Java", "Dart", "Kotlin", "Swift"],
+        "correctOptionIndex": 1,
+        "explanation": "Flutter uses Dart as its programming language, developed by Google.",
+        "xpPoints": 10,
+        "difficulty": "Beginner"
+      },
+      {
+        "id": "q_002",
+        "questionText": "Which company developed Flutter?",
+        "options": ["Apple", "Microsoft", "Google", "Meta"],
+        "correctOptionIndex": 2,
+        "explanation": "Flutter is an open-source UI toolkit created by Google.",
+        "xpPoints": 10,
+        "difficulty": "Easy"
+      },
+      {
+        "id": "q_003",
+        "questionText": "What is a Widget in Flutter?",
+        "options": [
+          "A database table",
+          "A UI building block",
+          "A network request",
+          "A test framework"
+        ],
+        "correctOptionIndex": 1,
+        "explanation": "In Flutter, everything is a widget — the basic building block of the UI.",
+        "xpPoints": 15,
+        "difficulty": "Beginner"
+      },
+      {
+        "id": "q_004",
+        "questionText": "Flutter apps can run on which platforms?",
+        "options": [
+          "Only Android",
+          "Only iOS",
+          "Android and iOS only",
+          "Android, iOS, Web, Desktop"
+        ],
+        "correctOptionIndex": 3,
+        "explanation": "Flutter supports Android, iOS, Web, Windows, macOS, and Linux.",
+        "xpPoints": 15,
+        "difficulty": "Easy"
+      },
+      {
+        "id": "q_005",
+        "questionText": "What is hot reload in Flutter?",
+        "options": [
+          "Restarting the device",
+          "Instantly reflecting code changes without losing state",
+          "Clearing the cache",
+          "Updating the SDK"
+        ],
+        "correctOptionIndex": 1,
+        "explanation": "Hot reload injects updated source code into the running Dart VM without restarting the app.",
+        "xpPoints": 20,
+        "difficulty": "Beginner"
+      }
+    ]
+  },
+  "fields": {
+    "id": { "type": "string", "description": "Unique quiz ID" },
+    "courseId": { "type": "string", "description": "Parent course ID" },
+    "lessonId": { "type": "string", "description": "Parent lesson ID" },
+    "title": { "type": "string", "description": "Quiz display title" },
+    "totalQuestions": { "type": "int", "description": "Number of questions in this quiz" },
+    "questions": {
+      "type": "List<Map>",
+      "description": "Array of question objects",
+      "itemFields": {
+        "id": { "type": "string", "description": "Unique question ID" },
+        "questionText": { "type": "string", "description": "The question prompt" },
+        "options": { "type": "List<string>", "description": "4 answer options" },
+        "correctOptionIndex": { "type": "int", "description": "Index of the correct option (0-based)" },
+        "explanation": { "type": "string", "description": "Explanation shown after answering" },
+        "xpPoints": { "type": "int", "description": "XP earned for correct answer" },
+        "difficulty": { "type": "string", "description": "Beginner | Easy | Medium | Hard" }
+      }
+    }
+  }
+}
