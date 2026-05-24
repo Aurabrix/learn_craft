@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_craft/core/theme/app_colors.dart';
 
 // ── Label above input field (ALL CAPS, Duolingo style) ───────
 class DuoLabel extends StatelessWidget {
@@ -12,7 +13,7 @@ class DuoLabel extends StatelessWidget {
       style: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w800,
-        color: Color(0xFFAAAAAA),
+        color: AppColors.labelGrey,
         letterSpacing: 0.8,
       ),
     );
@@ -48,12 +49,12 @@ class DuoTextField extends StatelessWidget {
       style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF1A1A2E),
+        color: AppColors.dark,
       ),
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: const TextStyle(
-          color: Color(0xFFCCCCCC),
+          color: AppColors.chevronGrey,
           fontWeight: FontWeight.w500,
         ),
         suffixIcon: suffixIcon != null
@@ -65,20 +66,20 @@ class DuoTextField extends StatelessWidget {
         suffixIconConstraints:
             const BoxConstraints(minWidth: 40, minHeight: 40),
         filled: true,
-        fillColor: const Color(0xFFF7F7F7),
+        fillColor: AppColors.greyBg,
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E5E5), width: 2),
+          borderSide: const BorderSide(color: AppColors.greyLight, width: 2),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFFE5E5E5), width: 2),
+          borderSide: const BorderSide(color: AppColors.greyLight, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF1CB0F6), width: 2),
+          borderSide: const BorderSide(color: AppColors.blue, width: 2),
         ),
       ),
     );
@@ -98,11 +99,6 @@ class DuoGreenButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isLoading;
 
-  static const _green          = Color(0xFF58CC02);
-  static const _shadow         = Color(0xFF46A302);
-  static const _disabled       = Color(0xFFE5E5E5);
-  static const _disabledShadow = Color(0xFFCCCCCC);
-
   @override
   Widget build(BuildContext context) {
     final isDisabled = onTap == null;
@@ -112,11 +108,11 @@ class DuoGreenButton extends StatelessWidget {
         width: double.infinity,
         height: 56,
         decoration: BoxDecoration(
-          color: isDisabled ? _disabled : _green,
+          color: isDisabled ? AppColors.greyLight : AppColors.green,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: isDisabled ? _disabledShadow : _shadow,
+              color: isDisabled ? AppColors.chevronGrey : AppColors.greenShadow,
               offset: const Offset(0, 4),
               blurRadius: 0,
             ),
@@ -137,10 +133,55 @@ class DuoGreenButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w900,
-                  color: isDisabled ? const Color(0xFFAAAAAA) : Colors.white,
+                  color: isDisabled ? AppColors.labelGrey : Colors.white,
                   letterSpacing: 0.5,
                 ),
               ),
+      ),
+    );
+  }
+}
+
+// ── Outlined button (Duolingo 3D style) ─────────────────────
+class DuoOutlinedButton extends StatelessWidget {
+  const DuoOutlinedButton({
+    super.key,
+    required this.label,
+    required this.onTap,
+  });
+
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        height: 56,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.borderGrey, width: 2),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.borderGrey,
+              offset: Offset(0, 4),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: AppColors.green,
+            letterSpacing: 0.3,
+          ),
+        ),
       ),
     );
   }
@@ -161,10 +202,10 @@ class DuoBackButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE5E5E5), width: 2),
+          border: Border.all(color: AppColors.greyLight, width: 2),
           boxShadow: const [
             BoxShadow(
-              color: Color(0xFFE5E5E5),
+              color: AppColors.greyLight,
               offset: Offset(0, 3),
               blurRadius: 0,
             ),
@@ -172,7 +213,7 @@ class DuoBackButton extends StatelessWidget {
         ),
         child: const Icon(
           Icons.chevron_left_rounded,
-          color: Color(0xFF1A1A2E),
+          color: AppColors.dark,
           size: 26,
         ),
       ),

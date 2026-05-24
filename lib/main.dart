@@ -11,9 +11,11 @@ import 'package:learn_craft/features/auth/data/datasources/auth_remote_data_sour
 import 'package:learn_craft/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:learn_craft/features/auth/domain/usecases/check_username_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/create_user_use_case.dart';
+import 'package:learn_craft/features/auth/domain/usecases/get_current_user_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/login_use_case.dart';
 import 'package:learn_craft/features/auth/domain/usecases/logout_use_case.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:learn_craft/features/profile/presentation/cubit/user_cubit.dart';
 import 'package:learn_craft/core/services/feedback_service.dart';
 import 'package:learn_craft/firebase_options.dart';
 
@@ -34,6 +36,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late final AuthBloc _authBloc;
+  late final UserCubit _userCubit;
   late final RouterNotifier _routerNotifier;
   late final GoRouter _router;
 
@@ -48,6 +51,9 @@ class _MyAppState extends State<MyApp> {
       logoutUseCase: LogoutUseCase(repository),
       checkUsernameUseCase: CheckUsernameUseCase(repository),
     );
+    _userCubit = UserCubit(
+      getCurrentUserUseCase: GetCurrentUserUseCase(repository),
+    );
     _routerNotifier = RouterNotifier(_authBloc);
     _router = buildRouter(_routerNotifier);
   }
@@ -55,6 +61,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     _authBloc.close();
+    _userCubit.close();
     _routerNotifier.dispose();
     _router.dispose();
     super.dispose();
@@ -65,6 +72,7 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: _authBloc),
+        BlocProvider.value(value: _userCubit),
         BlocProvider(create: (_) => ThemeCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(

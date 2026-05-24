@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:learn_craft/core/theme/app_colors.dart';
 
 class AppToast {
   AppToast._();
-
-  static const _redFill    = Color(0xFFFF4B4B);
-  static const _redShadow  = Color(0xFFCC3333);
-  static const _greenFill  = Color(0xFF58CC02);
-  static const _greenShadow = Color(0xFF46A302);
 
   static OverlayEntry? _currentEntry;
 
@@ -26,8 +22,8 @@ class AppToast {
       builder: (_) => _DuoToast(
         message: message,
         isError: isError,
-        fillColor:   isError ? _redFill   : _greenFill,
-        shadowColor: isError ? _redShadow : _greenShadow,
+        fillColor:   isError ? AppColors.red   : AppColors.green,
+        shadowColor: isError ? AppColors.redShadow : AppColors.greenShadow,
         icon: isError
             ? Icons.cancel_rounded
             : Icons.check_circle_rounded,

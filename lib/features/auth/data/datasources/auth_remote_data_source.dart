@@ -1,3 +1,5 @@
+import 'package:learn_craft/features/auth/data/models/user_model.dart';
+
 abstract class AuthRemoteDataSource {
   Future<void> login({required String email, required String password});
 
@@ -9,6 +11,8 @@ abstract class AuthRemoteDataSource {
   });
 
   Future<bool> isUsernameAvailable(String username);
+
+  Future<UserModel?> getCurrentUser();
 
   Future<void> logout();
 }

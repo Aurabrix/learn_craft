@@ -1,3 +1,5 @@
+import 'package:learn_craft/features/auth/domain/entities/user_e.dart';
+
 abstract class AuthRepository {
   Future<void> login({required String email, required String password});
 
@@ -9,6 +11,8 @@ abstract class AuthRepository {
   });
 
   Future<bool> isUsernameAvailable(String username);
+
+  Future<UserEntity?> getCurrentUser();
 
   Future<void> logout();
 }

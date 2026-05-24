@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/constants/app_paths.dart';
+import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
 import 'package:learn_craft/features/auth/presentation/bloc/auth_bloc.dart';
 import 'duo_widgets.dart';
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Welcome back!',
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w900,
-                          color: const Color(0xFF1A1A2E),
+                          color: AppColors.dark,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -94,14 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Log in to continue your streak 🔥',
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF777777),
+                          color: AppColors.grey,
                         ),
                       ),
 
                       const SizedBox(height: 32),
 
                       // ── Email ──────────────────────────
-                      DuoLabel('EMAIL ADDRESS'),
+                      const DuoLabel('EMAIL ADDRESS'),
                       const SizedBox(height: 6),
                       DuoTextField(
                         controller: _emailController,
@@ -112,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 20),
 
                       // ── Password ───────────────────────
-                      DuoLabel('PASSWORD'),
+                      const DuoLabel('PASSWORD'),
                       const SizedBox(height: 6),
                       DuoTextField(
                         controller: _passwordController,
@@ -125,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             _obscurePassword
                                 ? Icons.visibility_off_outlined
                                 : Icons.visibility_outlined,
-                            color: const Color(0xFFAAAAAA),
+                            color: AppColors.labelGrey,
                             size: 20,
                           ),
                         ),
@@ -141,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             'Forgot password?',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF1CB0F6),
+                              color: AppColors.blue,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -170,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             "Don't have an account? ",
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF777777),
+                              color: AppColors.grey,
                             ),
                           ),
                           GestureDetector(
@@ -178,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               'SIGN UP',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: const Color(0xFF58CC02),
+                                color: AppColors.green,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),

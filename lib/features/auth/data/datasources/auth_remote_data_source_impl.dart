@@ -53,7 +53,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final userModel = UserModel(
       id: user.uid,
       name: name,
-
       email: email,
       profileImage: avatarUrl,
       deviceToken: fcmToken,
@@ -75,6 +74,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         .get();
 
     return query.docs.isEmpty;
+  }
+
+  @override
+  Future<UserModel?> getCurrentUser() async {
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser == null) return null;
+
+    final doc = await _firestore
+        .collection('users')
+        .doc(firebaseUser.uid)
+        .get();
+
+    if (!doc.exists || doc.data() == null) return null;
+    return UserModel.fromJson(doc.data()!);
   }
 
   @override

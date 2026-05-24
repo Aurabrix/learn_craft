@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_craft/core/constants/app_firebase.dart';
+import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/constants/app_paths.dart';
@@ -29,7 +30,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 
   // Username availability
   Timer? _debounce;
-  bool? _usernameAvailable;   // null = not checked, true = available, false = taken
+  bool? _usernameAvailable;
   bool _usernameChecking = false;
 
   void _onUsernameChanged(String value) {
@@ -188,7 +189,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         textAlign: TextAlign.center,
                         style: theme.textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.w900,
-                          color: const Color(0xFF1A1A2E),
+                          color: AppColors.dark,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -197,7 +198,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         _subtitles[_step],
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: const Color(0xFF777777),
+                          color: AppColors.grey,
                         ),
                       ),
 
@@ -264,7 +265,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                           Text(
                             'Already have an account? ',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF777777),
+                              color: AppColors.grey,
                             ),
                           ),
                           GestureDetector(
@@ -272,7 +273,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                             child: Text(
                               'LOG IN',
                               style: theme.textTheme.bodySmall?.copyWith(
-                                color: const Color(0xFF58CC02),
+                                color: AppColors.green,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -310,7 +311,7 @@ class _StepRail extends StatelessWidget {
             margin: EdgeInsets.only(left: i == 0 ? 0 : 6),
             height: 6,
             decoration: BoxDecoration(
-              color: done ? const Color(0xFF58CC02) : const Color(0xFFE5E5E5),
+              color: done ? AppColors.green : AppColors.greyLight,
               borderRadius: BorderRadius.circular(99),
             ),
           ),
@@ -341,7 +342,7 @@ class _AvatarStep extends StatelessWidget {
           child: Text(
             'No avatars available.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Color(0xFFAAAAAA), fontSize: 13),
+            style: TextStyle(color: AppColors.labelGrey, fontSize: 13),
           ),
         ),
       );
@@ -448,20 +449,18 @@ class _AvatarTileState extends State<_AvatarTile>
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: widget.isSelected
-                  ? const Color(0xFF58CC02)
-                  : const Color(0xFF3A3A3A),
+              color: widget.isSelected ? AppColors.green : const Color(0xFF3A3A3A),
               width: widget.isSelected ? 3.5 : 2,
             ),
             boxShadow: widget.isSelected
                 ? [
                     const BoxShadow(
-                      color: Color(0xFF46A302),
+                      color: AppColors.greenShadow,
                       offset: Offset(0, 4),
                       blurRadius: 0,
                     ),
                     BoxShadow(
-                      color: const Color(0xFF58CC02).withValues(alpha: 0.35),
+                      color: AppColors.green.withValues(alpha: 0.35),
                       blurRadius: 16,
                       spreadRadius: 2,
                     ),
@@ -471,7 +470,7 @@ class _AvatarTileState extends State<_AvatarTile>
           child: Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFF2A2A2A),
+              color: AppColors.avatarBg,
             ),
             child: Stack(
               children: [
@@ -481,15 +480,15 @@ class _AvatarTileState extends State<_AvatarTile>
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
-                    placeholder: (ctx, url) => Container(
-                      color: const Color(0xFF2A2A2A),
-                      child: const Icon(Icons.person_rounded,
-                          color: Color(0xFF666666)),
+                    placeholder: (ctx, url) => const ColoredBox(
+                      color: AppColors.avatarBg,
+                      child: Icon(Icons.person_rounded,
+                          color: AppColors.iconGrey),
                     ),
-                    errorWidget: (ctx, url, err) => Container(
-                      color: const Color(0xFF2A2A2A),
-                      child: const Icon(Icons.broken_image_rounded,
-                          color: Color(0xFF666666)),
+                    errorWidget: (ctx, url, err) => const ColoredBox(
+                      color: AppColors.avatarBg,
+                      child: Icon(Icons.broken_image_rounded,
+                          color: AppColors.iconGrey),
                     ),
                   ),
                 ),
@@ -504,12 +503,12 @@ class _AvatarTileState extends State<_AvatarTile>
                       width: 24,
                       height: 24,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF58CC02),
+                        color: AppColors.green,
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2),
                         boxShadow: const [
                           BoxShadow(
-                            color: Color(0xFF46A302),
+                            color: AppColors.greenShadow,
                             offset: Offset(0, 2),
                             blurRadius: 0,
                           ),
@@ -575,27 +574,27 @@ class _UsernameStep extends StatelessWidget {
                   icon: _buildSpinner(),
                   text: 'Checking...',
                   bgColor: const Color(0xFFE8F4FD),
-                  fgColor: const Color(0xFF1CB0F6),
+                  fgColor: AppColors.blue,
                   borderColor: const Color(0xFFB3DEFA),
                 )
               : isAvailable == true
                   ? _buildChip(
                       key: const ValueKey('available'),
                       icon: const Icon(Icons.check_circle_rounded, size: 16,
-                          color: Color(0xFF58CC02)),
+                          color: AppColors.green),
                       text: 'Available!',
                       bgColor: const Color(0xFFEAFBE0),
-                      fgColor: const Color(0xFF58CC02),
+                      fgColor: AppColors.green,
                       borderColor: const Color(0xFFC4EDA8),
                     )
                   : isAvailable == false
                       ? _buildChip(
                           key: const ValueKey('taken'),
                           icon: const Icon(Icons.cancel_rounded, size: 16,
-                              color: Color(0xFFFF4B4B)),
+                              color: AppColors.red),
                           text: 'Already taken',
                           bgColor: const Color(0xFFFFF0F0),
-                          fgColor: const Color(0xFFFF4B4B),
+                          fgColor: AppColors.red,
                           borderColor: const Color(0xFFFFCCCC),
                         )
                       : const SizedBox.shrink(key: ValueKey('empty')),
@@ -610,7 +609,7 @@ class _UsernameStep extends StatelessWidget {
       height: 14,
       child: CircularProgressIndicator(
         strokeWidth: 2,
-        color: Color(0xFF1CB0F6),
+        color: AppColors.blue,
       ),
     );
   }
@@ -689,7 +688,7 @@ class _EmailPasswordStep extends StatelessWidget {
               obscure
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: const Color(0xFFAAAAAA),
+              color: AppColors.labelGrey,
               size: 20,
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/features/auth/presentation/ui/duo_widgets.dart';
 
 enum SourceType { pdf, docx, url }
@@ -52,11 +53,10 @@ class _UploadScreenState extends State<UploadScreen> {
                     'New Game',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w900,
-                      color: const Color(0xFF1A1A2E),
+                      color: AppColors.dark,
                     ),
                   ),
                   const Spacer(),
-                  // Diamond cost badge
                   _DiamondBadge(count: 10),
                 ],
               ),
@@ -75,7 +75,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       'What do you want\nto learn?',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w900,
-                        color: const Color(0xFF1A1A2E),
+                        color: AppColors.dark,
                         letterSpacing: -0.5,
                         height: 1.2,
                       ),
@@ -84,7 +84,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     Text(
                       'Upload a file or paste a URL — we\'ll\ndo the rest.',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: const Color(0xFF777777),
+                        color: AppColors.grey,
                         height: 1.5,
                       ),
                     ),
@@ -92,7 +92,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     const SizedBox(height: 28),
 
                     // ── Source type selector ─────────────
-                    DuoLabel('SOURCE TYPE'),
+                    const DuoLabel('SOURCE TYPE'),
                     const SizedBox(height: 10),
                     Row(
                       children: [
@@ -122,7 +122,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     const SizedBox(height: 24),
 
                     // ── Game title ───────────────────────
-                    DuoLabel('GAME TITLE'),
+                    const DuoLabel('GAME TITLE'),
                     const SizedBox(height: 6),
                     DuoTextField(
                       controller: _titleController,
@@ -133,7 +133,7 @@ class _UploadScreenState extends State<UploadScreen> {
 
                     // ── File / URL input ─────────────────
                     if (_selected == SourceType.url) ...[
-                      DuoLabel('PASTE URL'),
+                      const DuoLabel('PASTE URL'),
                       const SizedBox(height: 6),
                       DuoTextField(
                         controller: _urlController,
@@ -141,7 +141,7 @@ class _UploadScreenState extends State<UploadScreen> {
                         keyboardType: TextInputType.url,
                       ),
                     ] else ...[
-                      DuoLabel('UPLOAD FILE'),
+                      const DuoLabel('UPLOAD FILE'),
                       const SizedBox(height: 6),
                       _FilePicker(
                         fileName: _pickedFileName,
@@ -166,12 +166,12 @@ class _UploadScreenState extends State<UploadScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.diamond_rounded,
-                              size: 14, color: Color(0xFF1CB0F6)),
+                              size: 14, color: AppColors.blue),
                           const SizedBox(width: 5),
                           Text(
                             'This will cost 10 diamonds',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: const Color(0xFF777777),
+                              color: AppColors.grey,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -205,12 +205,6 @@ class _SourceCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  static const _green       = Color(0xFF58CC02);
-  static const _greenLight  = Color(0xFFEDFAD4);
-  static const _greenShadow = Color(0xFF46A302);
-  static const _grey        = Color(0xFFF7F7F7);
-  static const _greyShadow  = Color(0xFFE5E5E5);
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -220,15 +214,15 @@ class _SourceCard extends StatelessWidget {
           duration: const Duration(milliseconds: 180),
           height: 80,
           decoration: BoxDecoration(
-            color: isSelected ? _greenLight : _grey,
+            color: isSelected ? AppColors.greenLight : AppColors.greyBg,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(
-              color: isSelected ? _green : _greyShadow,
+              color: isSelected ? AppColors.green : AppColors.greyLight,
               width: 2,
             ),
             boxShadow: [
               BoxShadow(
-                color: isSelected ? _greenShadow : _greyShadow,
+                color: isSelected ? AppColors.greenShadow : AppColors.greyLight,
                 offset: const Offset(0, 4),
                 blurRadius: 0,
               ),
@@ -239,14 +233,14 @@ class _SourceCard extends StatelessWidget {
             children: [
               Icon(icon,
                   size: 26,
-                  color: isSelected ? _green : const Color(0xFFAAAAAA)),
+                  color: isSelected ? AppColors.green : AppColors.labelGrey),
               const SizedBox(height: 5),
               Text(
                 label,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
-                  color: isSelected ? _green : const Color(0xFFAAAAAA),
+                  color: isSelected ? AppColors.green : AppColors.labelGrey,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -281,27 +275,19 @@ class _FilePicker extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 28),
         decoration: BoxDecoration(
-          color: hasFile
-              ? const Color(0xFFEDFAD4)
-              : const Color(0xFFF7F7F7),
+          color: hasFile ? AppColors.greenLight : AppColors.greyBg,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: hasFile
-                ? const Color(0xFF58CC02)
-                : const Color(0xFFE5E5E5),
+            color: hasFile ? AppColors.green : AppColors.greyLight,
             width: 2,
           ),
         ),
         child: Column(
           children: [
             Icon(
-              hasFile
-                  ? Icons.check_circle_rounded
-                  : Icons.upload_file_rounded,
+              hasFile ? Icons.check_circle_rounded : Icons.upload_file_rounded,
               size: 36,
-              color: hasFile
-                  ? const Color(0xFF58CC02)
-                  : const Color(0xFFAAAAAA),
+              color: hasFile ? AppColors.green : AppColors.labelGrey,
             ),
             const SizedBox(height: 10),
             Text(
@@ -309,9 +295,7 @@ class _FilePicker extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
-                color: hasFile
-                    ? const Color(0xFF58CC02)
-                    : const Color(0xFFAAAAAA),
+                color: hasFile ? AppColors.green : AppColors.labelGrey,
               ),
             ),
             if (!hasFile) ...[
@@ -321,7 +305,7 @@ class _FilePicker extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: const Color(0xFFAAAAAA).withValues(alpha: 0.8),
+                  color: AppColors.labelGrey.withValues(alpha: 0.8),
                 ),
               ),
             ],
@@ -342,22 +326,21 @@ class _DiamondBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F6FF),
+        color: AppColors.blueLight,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF1CB0F6), width: 1.5),
+        border: Border.all(color: AppColors.blue, width: 1.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.diamond_rounded,
-              size: 16, color: Color(0xFF1CB0F6)),
+          const Icon(Icons.diamond_rounded, size: 16, color: AppColors.blue),
           const SizedBox(width: 5),
           Text(
             '$count',
             style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w900,
-              color: Color(0xFF1CB0F6),
+              color: AppColors.blue,
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:learn_craft/features/auth/domain/entities/user_e.dart';
 import 'package:learn_craft/features/auth/domain/repositories/auth_repository.dart';
 
 import '../datasources/auth_remote_data_source.dart';
@@ -28,6 +29,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isUsernameAvailable(String username) =>
       remoteDataSource.isUsernameAvailable(username);
+
+  @override
+  Future<UserEntity?> getCurrentUser() =>
+      remoteDataSource.getCurrentUser();
 
   @override
   Future<void> logout() => remoteDataSource.logout();

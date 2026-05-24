@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learn_craft/core/theme/app_colors.dart';
 import 'package:learn_craft/core/utils/app_toast.dart';
-import 'package:learn_craft/core/widgets/app_button.dart';
+import 'package:learn_craft/features/auth/presentation/ui/duo_widgets.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key, required this.email});
@@ -54,198 +54,110 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF4ECDC4),
-      body: Stack(
-        children: [
-          // Gradient hero background
-          Container(
-            height: screenHeight * 0.42,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF6BDED8), Color(0xFF38B2AC)],
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // ── Top bar ──────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: DuoBackButton(onTap: () => context.pop()),
               ),
             ),
-          ),
 
-          // Decorative circle
-          Positioned(
-            top: -30,
-            right: -30,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.08),
-              ),
-            ),
-          ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
 
-          // White card form area
-          Column(
-            children: [
-              SizedBox(height: screenHeight * 0.30),
-              Expanded(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                  ),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.fromLTRB(28, 32, 28, 32),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Text(
+                      'Check your inbox!',
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.dark,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    RichText(
+                      text: TextSpan(
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: AppColors.grey,
+                        ),
+                        children: [
+                          const TextSpan(text: 'We sent a 6-digit code to '),
+                          TextSpan(
+                            text: widget.email,
+                            style: TextStyle(
+                              color: AppColors.dark.withValues(alpha: 0.85),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 36),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        _length,
+                        (i) => _OtpBox(
+                          controller: _controllers[i],
+                          focusNode: _focusNodes[i],
+                          onChanged: (v) => _onChanged(v, i),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 36),
+
+                    DuoGreenButton(
+                      label: 'VERIFY CODE',
+                      onTap: _onVerify,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Check your inbox!',
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: -0.5,
-                            color: AppColors.lightOnSurface,
+                          "Didn't receive a code? ",
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppColors.grey,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        RichText(
-                          text: TextSpan(
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: AppColors.lightOnSurface.withValues(alpha: 0.5),
-                            ),
-                            children: [
-                              const TextSpan(text: 'We sent a 6-digit code to '),
-                              TextSpan(
-                                text: widget.email,
-                                style: TextStyle(
-                                  color: AppColors.lightOnSurface.withValues(alpha: 0.85),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 36),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(
-                            _length,
-                            (i) => _OtpBox(
-                              controller: _controllers[i],
-                              focusNode: _focusNodes[i],
-                              onChanged: (v) => _onChanged(v, i),
+                        GestureDetector(
+                          onTap: () {
+                            // TODO: resend OTP
+                          },
+                          child: Text(
+                            'Resend',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: AppColors.green,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 36),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: AppElevatedButton(
-                            onPressed: _onVerify,
-                            child: const Text('Verify Code'),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Didn't receive a code? ",
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: AppColors.lightOnSurface
-                                    .withValues(alpha: 0.5),
-                              ),
-                            ),
-                            TapFeedback(
-                              onTap: () {
-                                // TODO: resend OTP
-                              },
-                              child: Text(
-                                'Resend',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: AppColors.brandPrimary,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
 
-          // Hero content over gradient
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 28, 0),
-              child: Row(
-                children: [
-                  TapFeedback(
-                    onTap: () => context.pop(),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  const Text(
-                    'Verify Email',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          // Centered mail icon in hero
-          Positioned(
-            top: screenHeight * 0.10,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    color: Colors.white.withValues(alpha: 0.35),
-                    width: 1.5,
-                  ),
-                ),
-                child: const Icon(
-                  Icons.mark_email_unread_rounded,
-                  color: Colors.white,
-                  size: 40,
+                    const SizedBox(height: 32),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -279,20 +191,20 @@ class _OtpBox extends StatelessWidget {
         onChanged: onChanged,
         style: theme.textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w800,
-          color: AppColors.lightOnSurface,
+          color: AppColors.dark,
         ),
         decoration: InputDecoration(
           counterText: '',
-          fillColor: Colors.white,
+          fillColor: AppColors.greyBg,
           filled: true,
           contentPadding: EdgeInsets.zero,
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.softBorder, width: 1.5),
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.greyLight, width: 2),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: const BorderSide(color: AppColors.brandPrimary, width: 2),
+            borderRadius: BorderRadius.circular(14),
+            borderSide: const BorderSide(color: AppColors.blue, width: 2),
           ),
         ),
       ),

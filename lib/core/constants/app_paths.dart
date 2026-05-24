@@ -6,6 +6,7 @@ class AppPaths {
   static const String login = '/login';
   static const String createUser = '/create-user';
   // static const String otp        = '/otp';
-  static const String home   = '/home';
-  static const String upload = '/upload';
+  static const String home    = '/home';
+  static const String upload  = '/upload';
+  static const String profile = '/profile';
 }
